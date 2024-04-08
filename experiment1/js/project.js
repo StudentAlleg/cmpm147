@@ -23,11 +23,50 @@ class MyProjectClass {
 }
 
 function main() {
-  // create an instance of the class
-  let myInstance = new MyProjectClass("value1", "value2");
-
-  // call a method on the instance
-  myInstance.myMethod();
+  const fillers = {
+    greeting: ["Hello", "Greetings", "Hi", "Welcome"],
+    adj: ["great", "good", "tasty", "yummy", "delicious", "scrumptious"],
+    ingredient: ["blueberry", "chocolate", "peach", "cherry", "apricot"],
+    pastry: ["muffin", "scone", "bar"],
+    attempt: ["try", "shot", "attempt", "go"]
+  };
+  
+  const template = `$greeting baker, in need of a $adj idea?
+  
+  How about making a $adj pastry? A $adj $ingredient $pastry sounds good to me, give it a $attempt!
+  
+  Good luck!
+  `;
+  
+  
+  // STUDENTS: You don't need to edit code below this line.
+  
+  const slotPattern = /\$(\w+)/;
+  
+  function replacer(match, name) {
+    let options = fillers[name];
+    if (options) {
+      return options[Math.floor(Math.random() * options.length)];
+    } else {
+      return `<UNKNOWN:${name}>`;
+    }
+  }
+  
+  function generate() {
+    let story = template;
+    while (story.match(slotPattern)) {
+      story = story.replace(slotPattern, replacer);
+    }
+  
+    /* global box */
+    $("#box").text(story);
+  }
+  
+  /* global clicker */
+  $("#clicker").click(generate);
+  
+  generate();
+  
 }
 
 // let's get this party started - uncomment me
