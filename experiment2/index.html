@@ -45,23 +45,42 @@
 				<h2>Description</h2>
 				<p>This project offers a generative, living impression of this inspiring image:</p>
 				<div class="image-wrapper">
-					<img src="img/railroad-tracks-overhead-4078160842.jpg">
+					<img src="../img/railroad-tracks-overhead-4078160842.jpg">
 				</div>
 			</div>
 
 			<div class="minor-section">
 				<h2>Description</h2>
-				<p>What are you trying to acomplish with this experiment?</p>
+				<p>This experiment explores using p5.js to generate a living image based on a source image.
+					It combines primitive shapes and time to create an illusion of passing over railroad tracks.</p>
 			</div>
 
 			<div class="minor-section">
 				<h2>Technical</h2>
-				<p>Describe in detail what you did technically and how it works?</p>
+				<p>Relation to inspring image:
+
+					Color: The color of the ground and
+					Primitives: The Tracks and
+					Polygons: The grass on the right side is generated randomly using vertex calls.
+					Composition: Different random seed values lead to differently spaced ties, tracks in different positions, and a different grass pattern
+					Life: The tracks change as if this is a camera slowly traversing up a line 
+				</p>
 			</div>
 
 			<div class="minor-section">
 				<h2>Reflection</h2>
-				<p>Each person that worked on the code should reflect on the process, the difficulties, and the successes of the experiment.</p>
+				<p>I knew from the start I wanted to do soemthing railroad themed, because I like trains and also railroad tracks are somewhat easy to draw.
+					I originally wanted it to be more abstract, like <a href="https://2.bp.blogspot.com/-ZpqmOFchKtM/U-e3-uf4mLI/AAAAAAABVd8/bdcxFCx2_N8/s1600/SEPTA_1234-Control-Room-RRD-Big-Board-R1-R3-R8.jpg">this</a></li>,
+					and moving along it like <a href="https://mixkit.co/free-stock-video/aerial-overhead-shot-of-a-highway-in-a-city-49830/">this</a>.
+				During this approach, I learned how to create the effect of the camera appearing to move. I did not, however; have an actual reference image. So I changed to the image it is now based on, scrapping the switch idea.
+				Parts of the code are leftover from that (i.e. the tracks object, which was changed from a line to an actual track).
+				While I am happy with the effect it created, it is not perfect.
+				If I was to work on it more, I'd work on the following.
+				There are misaligned ties every once and a while, and depending on the canvas size it can be a little jarring.
+				The grass does not move, the technique I used with the ties will not work with that type of shape.
+				The ties, while the number is supposed to be randomly generated (based on seed), does not actually vary.
+				Still, I enjoyed this project, and it was interesting playing around with the numbers and seeing the result.
+				</p>
 			</div>
 
 		</section>
