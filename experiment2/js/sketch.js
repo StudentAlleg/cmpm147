@@ -7,23 +7,49 @@
 
 // Constants - User-servicable parts
 // In a longer project I like to put these in a separate file
-const VALUE1 = 1;
-const VALUE2 = 2;
+let seed = 256;
 
-// Globals
-let myInstance;
-let canvasContainer;
-var centerHorz, centerVert;
+const grassColor = "#73750d";
+const gravelColor = "#909090";
+const railColor = "#999999";
+const tieColor = "#604020";
 
-class MyClass {
-    constructor(param1, param2) {
-        this.property1 = param1;
-        this.property2 = param2;
+class Track {
+  constructor(x, gauge, tieFrequency, time) {
+    this.x = x;
+    this.gauge = gauge;
+    this.tieFrequency = tieFrequency;
+    this.time = time;
+    this.build();
+    
+  }
+  
+  build() {
+    rectMode(CENTER);
+    let rail1X = this.x - this.gauge/2;
+    let rail2X = this.x + this.gauge/2;
+    let railWidth = this.gauge/5;
+    
+    let tieWidth = this.gauge + (railWidth * 3);
+    let tieHeight = this.gauge/5;
+    
+    fill(railColor);
+    rect(rail1X, height/2, railWidth, height);
+    rect(rail2X, height/2, railWidth, height);
+  
+    fill(tieColor);
+    for (let i = 0; i < this.tieFrequency; i++) {
+      let y = this.time + (i * (height / this.tieFrequency));
+      if (y > height + tieHeight) {
+        y -= height + tieHeight;
+      }
+      
+      rect(this.x, y, tieWidth, tieHeight);
+ 
     }
 
-    myMethod() {
-        // code to run when method is called
-    }
+  }
+    
 }
 
 function resizeScreen() {
@@ -34,43 +60,53 @@ function resizeScreen() {
   // redrawCanvas(); // Redraw everything based on new size
 }
 
+$("#reimagine").click(function() {
+  seed++;
+});
+
 // setup() function is called once when the program starts
-function setup() {
-  // place our canvas, making it fit our container
+function setup() {  
   canvasContainer = $("#canvas-container");
   let canvas = createCanvas(canvasContainer.width(), canvasContainer.height());
   canvas.parent("canvas-container");
-  // resize canvas is the page is resized
-
-  // create an instance of the class
-  myInstance = new MyClass("VALUE1", "VALUE2");
-
   $(window).resize(function() {
     resizeScreen();
   });
   resizeScreen();
 }
 
+
 // draw() function is called repeatedly, it's the main animation loop
 function draw() {
-  background(220);    
-  // call a method on the instance
-  myInstance.myMethod();
+  randomSeed(seed);
 
-  // Set up rotation for the rectangle
-  push(); // Save the current drawing context
-  translate(centerHorz, centerVert); // Move the origin to the rectangle's center
-  rotate(frameCount / 100.0); // Rotate by frameCount to animate the rotation
-  fill(234, 31, 81);
-  noStroke();
-  rect(-125, -125, 250, 250); // Draw the rectangle centered on the new origin
-  pop(); // Restore the original drawing context
+  background(gravelColor);
+  let time = ((millis()/100) % height);
 
-  // The text is not affected by the translate and rotate
-  fill(255);
-  textStyle(BOLD);
-  textSize(140);
-  text("p5*", centerHorz - 105, centerVert + 40);
+  const trackNum = 2;
+  let ties = random(10, 15);
+  let tracks = [];
+  for (let i = 1; i <= trackNum; i++) {
+    let x = (i * width)/(trackNum + 1) + random(-5, 5);
+    tracks.push(new Track(x, 50, ties, time));
+  }
+  
+  fill(grassColor);
+  beginShape();
+  const xMin = 15*width/16;
+  const xMax = 31*width/32;
+  vertex(width, 0);
+  
+  
+  const vertices = random(8, 12);
+  
+  for (let i = 0; i <= vertices; i++) {
+    let y = (i * (height/vertices));
+    let x = random(xMin, xMax);
+    vertex(x, y);
+  }
+  vertex(width, height);
+  endShape();
 }
 
 // mousePressed() function is called once after every time a mouse button is pressed
