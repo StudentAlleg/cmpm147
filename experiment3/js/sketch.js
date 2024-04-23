@@ -70,7 +70,7 @@ function setup() {
   createCanvas(16 * numCols, 16 * numRows).parent("canvasContainer");
   //$("canvas").elt.getContext("2d").imageSmoothingEnabled = false;
 
-  $("#reseedButton").click(reseed);
+  $("#reimagine").on("click", reseed);
   $("#asciiBox").val(reparseGrid);
 
   reseed();
@@ -79,6 +79,7 @@ function setup() {
 
 function draw() {
   randomSeed(seed);
+  reparseGrid();
   drawGrid(currentGrid);
 }
 
@@ -98,9 +99,15 @@ function generateGrid(numCols, numRows) {
     }
     grid.push(row);
   }
-  for (let i = 0; i < floor(random(3, 10)); i++) {
-    generateRectangle(grid, ".", floor(random(0, numCols)), floor(random(1, numRows)), floor(random(1, 3)), floor(random(1, 3)));
+  for (let i = 0; i < floor(random(3, 5)); i++) {
+    generateRectangle(grid, ".", floor(random(1, numCols - 1)), floor(random(1, numRows)), floor(random(1, 3)), floor(random(1, 3)));
   }
+
+  for (let i = 0; i < floor(random(3, 5)); i++) {
+    let size = random(2, 2);
+    generateRectangle(grid, "+", floor(random(1, numCols - (size + 1))), floor(random(1, numRows - (size + 1))), size, size);
+  }
+
   
   
   return grid;
@@ -111,11 +118,30 @@ function drawGrid(grid) {
   
   for(let i = 0; i < grid.length; i++) {
     for(let j = 0; j < grid[i].length; j++) {
-      //aceTile(i, j, (floor(random(4))), 0);
-      drawContext(grid, i, j, "_", 0, 0);
+
+      if (gridCheck(grid, i, j, "+")) {
+        x = floor(random(0, 4) + second()) % 4;
+        placeTile(i, j, x, 3);
+        /*for (let k = -1; k <= 1; k++) {
+          for (let l = -1; l <= 1; l++) {
+            drawContext(grid, i + k, j + l, "+", 5, 4);
+          }
+        }*/
+      }
+
+      if (gridCheck(grid, i, j, "_")) {
+        for (let k = -1; k <= 1; k++) {
+          for (let l = -1; l <= 1; l++) {
+            drawContext(grid, i + k, j + l, "_", 5, 1);
+          }
+        }
+        x = floor(random(0, 4) + second()) % 4;
+        placeTile(i, j, x, 0);
+      }
+      
       
       if (gridCheck(grid, i, j, ".")) {
-        //placeTile(i, j, (floor(random(4))), 0);
+        placeTile(i, j, (floor(random(4))), 0);
         placeTile(i, j, 16 + floor(random(-1, 1)), 1 + floor(random(-1, 1)));
       }
         
@@ -134,6 +160,9 @@ function generateRectangle(grid, symbol, x, y, width, height) {
 }
 
 function gridCheck(grid, i, j, target) {
+  if (i < 0 || i > numCols || j < 0 || j > numRows) {
+    return false;
+  }
   try {
     return grid[i][j] == target;
   } catch (Exception) {
@@ -147,34 +176,33 @@ function gridCode(grid, i, j, target) {
   let southBit = gridCheck(grid, i - 1, j, target);
   let westBit = gridCheck(grid, i, j - 1, target);
   
-  return (northBit << 0) + (eastBit << 1) + (southBit << 2) + (westBit << 3);
+  return (northBit << 3) + (eastBit << 2) + (southBit << 1) + (westBit << 0);
 }
 
+//NESW
 const lookup = [
-  [0, 0],
-  [1, 0],
-  [2, 0],
-  [3, 0],
-  /*[0, 1],
-  [1, 1],
-  [2, 1],
-  [3, 1],
-  [0, 2],
-  [1, 2],
-  [2, 2],
-  [3, 2],
-  [0, 3],
-  [1, 3],
-  [2, 3],
-  [3, 3]*/
+  [0, 0], //0000
+  [-1, 0], //0001
+  [0, 1], //0010
+  [-1, -1], //0011
+  [1, 0], //0100
+  [0, 0], //0101
+  [1, -1], //0110
+  [0, 0], //0111
+  [0, 1], //1000
+  [-1, 1], //1001
+  [0, 0], //1010
+  [0, 0], //1011
+  [1, 1], //1100
+  [0, 0], //1101
+  [0, 0], //1110
+  [0, 0]  //1111
 ];
 console.log(lookup);
 
 function drawContext(grid, i, j, target, ti, tj) {
   //todo
   let code = gridCode(grid, i, j, target);
-  console.log(code);
-  code = floor(random(0, 4) + second()) % 4;
   const offset = lookup[code];
   placeTile(i, j, ti + offset[0], tj + offset[1]);
 }
