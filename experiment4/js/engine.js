@@ -1,10 +1,13 @@
 "use strict";
 
+const containerId = "#canvasContainer";
+
 /* global p5 */
 /* exported preload, setup, draw, mouseClicked */
 
 // Project base code provided by {amsmith,ikarth}@ucsc.edu
 
+let centerHorz, centerVert;
 
 let tile_width_step_main; // A width step is half a tile's width
 let tile_height_step_main; // A height step is half a tile's height
@@ -13,6 +16,15 @@ let tile_height_step_main; // A height step is half a tile's height
 let tile_rows, tile_columns;
 let camera_offset;
 let camera_velocity;
+
+function resizeScreen() {
+    centerHorz = canvasContainer.width() / 2; // Adjusted for drawing logic
+    centerVert = canvasContainer.height() / 2; // Adjusted for drawing logic
+    console.log("Resizing...");
+    resizeCanvas(canvasContainer.width(), canvasContainer.height());
+    // redrawCanvas(); // Redraw everything based on new size
+  }
+
 
 /////////////////////////////
 // Transforms between coordinate systems
@@ -62,8 +74,10 @@ function preload() {
 }
 
 function setup() {
-  let canvas = createCanvas(800, 400);
-  canvas.parent("container");
+    canvasContainer = $(containerId);
+    let canvas = createCanvas(canvasContainer.width(), canvasContainer.height());
+    
+    canvas.parent(containerId);
 
   camera_offset = new p5.Vector(-width / 2, height / 2);
   camera_velocity = new p5.Vector(0, 0);
@@ -72,19 +86,18 @@ function setup() {
     window.p3_setup();
   }
 
-  let label = createP();
-  label.html("World key: ");
-  label.parent("container");
-
-  let input = createInput("xyzzy");
-  input.parent(label);
-  input.input(() => {
-    rebuildWorld(input.value());
+  let inputKey = $("#worldSeed");
+  // event handler if the input key changes
+  inputKey.change(() => {
+    rebuildWorld(inputKey.val());
   });
 
-  createP("Arrow keys scroll. Clicking changes tiles.").parent("container");
 
-  rebuildWorld(input.value());
+  rebuildWorld(inputKey.val());
+  $(window).resize(function() {
+    resizeScreen();
+  });
+  resizeScreen();
 }
 
 function rebuildWorld(key) {
