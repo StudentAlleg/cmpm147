@@ -18,7 +18,9 @@
 
 function p3_preload() {}
 
-function p3_setup() {}
+function p3_setup() {
+    console.log("disco setup");
+}
 
 let worldSeed;
 
@@ -47,6 +49,7 @@ function p3_tileClicked(i, j) {
 function p3_drawBefore() {}
 
 function p3_drawTile(i, j) {
+    console.log("disco draw");
   stroke(0,0,0)
 
   let colors = [

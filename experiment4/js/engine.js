@@ -123,6 +123,7 @@ function mouseClicked() {
 }
 
 function draw() {
+    console.log("engine draw");
   // Keyboard controls!
   if (keyIsDown(LEFT_ARROW)) {
     camera_velocity.x -= 1;
@@ -164,6 +165,7 @@ function draw() {
   let x0 = Math.floor((0 - overdraw) * tile_columns);
   let x1 = Math.floor((1 + overdraw) * tile_columns);
 
+  console.log(y0, y1, x0, x1);
   for (let y = y0; y < y1; y++) {
     for (let x = x0; x < x1; x++) {
       drawTile(tileRenderingOrder([x + world_offset.x, y - world_offset.y]), [
