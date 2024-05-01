@@ -49,7 +49,7 @@ function p3_tileClicked(i, j) {
 function p3_drawBefore() {}
 
 function p3_drawTile(i, j) {
-  stroke(0,0,0)
+  stroke(0,0,0);
 
   let colors = [
     'lightgreen',
