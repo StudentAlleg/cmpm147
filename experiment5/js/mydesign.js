@@ -5,7 +5,7 @@ function getInspirations() {
   return [
     {
       name: "balloons black and white", 
-      assetUrl: "https://cdn.glitch.global/0d3e444d-e3fe-4a2f-8896-1e9c825bd2f2/balloonsbw.jpg?v=1714894641500",
+      assetUrl: "../img/balloonsbw.jpg",
       credit: "https://blog.ymtvacations.com/hubfs/Blog_Images/Hot_Air_balloon.jpg#keepProtocol",
       backgroundGradient: false,
       numShapes: 40,
